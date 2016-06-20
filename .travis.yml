@@ -1,0 +1,26 @@
+#
+# \brief Default Travis for TCP Server Project
+# \author Uilian Ries <uilianries@gmail.com>
+#
+dist: trusty
+
+language: cpp
+
+compiler: gcc
+
+before_install:
+  - sudo pip install conan
+
+script:
+  - mkdir build && cd build
+  - conan install ..
+  - cmake ..
+  - cmake --build . --config release
+  - sudo make install
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+
+branches:
+  only:
+    - master

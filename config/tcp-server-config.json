@@ -1,0 +1,9 @@
+{
+    "description" : "TCP Server configuration file",
+    "server" : {
+        "port": "30000"
+    },
+    "log" : {
+        "max_file_size" : "10000000"
+    }
+}

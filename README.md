@@ -2,11 +2,14 @@
 
 Simple Asynchronous TCP server.
 
-## Usage
-To run as daemon:
-$ tcp-server --daemon
+This server listen a port and log each message in a log file.
 
-The application uses the file at /etc/tcp-server.json as configuration.
+## Usage
+To run as daemon
+\$ tcp-server --daemon
+
+The application read the file /etc/tcp-server/tcp-server-config.json as
+ configuration.
 
 ## Features
 - Select port to listen

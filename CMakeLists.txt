@@ -7,3 +7,4 @@ conan_basic_setup()
 option(TESTS "Generate tests" ON)
 
 add_subdirectory(src)
+add_subdirectory(config)

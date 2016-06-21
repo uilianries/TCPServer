@@ -5,8 +5,8 @@ Simple Asynchronous TCP server.
 This server listen a port and log each message in a log file.
 
 ## Usage
-To run as daemon
-\$ tcp-server --daemon
+Run as daemon:
+-$ tcp-server --daemon
 
 The application read the file /etc/tcp-server/tcp-server-config.json as
  configuration.

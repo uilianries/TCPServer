@@ -17,6 +17,7 @@ script:
   - cmake ..
   - cmake --build . --config release
   - sudo make install
+  - bin/test-tcp-server
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

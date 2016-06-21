@@ -12,12 +12,8 @@ before_install:
   - sudo pip install conan
 
 script:
-  - mkdir build && cd build
-  - conan install ..
-  - cmake ..
-  - cmake --build . --config release
-  - sudo make install
-  - bin/test-tcp-server
+  - ./install.sh
+  - build/bin/test-tcp-server
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

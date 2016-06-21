@@ -1,8 +1,10 @@
-//
-// Created by uilian on 6/20/16.
-//
+/**
+ * \file
+ * \brief Launch TCP Server application
+ */
+#include <iostream>
+#include <Poco/Util/ServerApplication.h>
 
-int main()
-{
-    return 0;
-}
+#include "TCPServerApp.hpp"
+
+POCO_SERVER_MAIN(TCPServerApp)

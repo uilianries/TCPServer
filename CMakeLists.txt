@@ -6,6 +6,7 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
 # Compiler flags ##############################################################
+set(CMAKE_VERBOSE_MAKEFILE 1)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -coverage -std=c++11 -pedantic -Wall -Wshadow -Wextra -Winit-self -Wold-style-cast -Woverloaded-virtual -Werror")
 
 # Add sub directories #########################################################

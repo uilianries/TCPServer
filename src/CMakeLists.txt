@@ -2,12 +2,21 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(tcp-server CXX)
 
+# Libraries ###################################################################
+find_library(POCO_FOUNDATION PocoFoundation)
+find_library(POCO_UTIL PocoUtil)
+find_library(POCO_JSON PocoJSON)
+find_library(POCO_XML PocoXML)
+find_library(POCO_DATA PocoData)
+find_library(POCO_NET PocoNet)
+set(Poco_LIBRARIES ${POCO_UTIL} ${POCO_DATA} ${POCO_JSON} ${POCO_XML} ${POCO_NET} ${POCO_FOUNDATION})
+
 # Applicaion files ############################################################
 file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
 # Create Application ##########################################################
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME} ${Poco_LIBRARIES} pthread)
 
 # Install #####################################################################
 install(TARGETS ${PROJECT_NAME}

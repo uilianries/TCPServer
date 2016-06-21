@@ -8,6 +8,7 @@
 #include <Poco/Net/StreamSocket.h>
 #include <Poco/Net/SocketStream.h>
 #include <Poco/Net/NetException.h>
+#include <Poco/Path.h>
 #include <Poco/File.h>
 
 /**
@@ -76,4 +77,6 @@ TEST_F(TestTCPServer, Loopback)
     //ss << message();
 
     // TODO(uilian.ries) - Find message in log file
+    const Poco::Path log_path("/var/log/tcp-server/tcp-server.log");
+    ASSERT_TRUE(log_path.isFile());
 }

@@ -2,11 +2,12 @@
 
 Simple Asynchronous TCP server.
 
-This server listen a port and log each message in a log file.
+This server listen a port and log each received message in a log file.
 
 ## Usage
 Run as daemon:
--$ tcp-server --daemon
+
+_tcp-server --daemon_
 
 The application read the file /etc/tcp-server/tcp-server-config.json as
  configuration.
@@ -14,14 +15,28 @@ The application read the file /etc/tcp-server/tcp-server-config.json as
 ## Features
 - Select port to listen
 - Select file log size for data stream
+- Select log root directory
 
 ## install
-- mkdir build
-- cd build
-- conan install ..
-- cmake ..
-- cmake --build . --config release
-- sudo make install
+
+Execute install.sh
+
+or
+
+Follow the steps:
+
+_mkdir build_
+
+_cd build_
+
+_conan install .._
+
+_cmake .._
+
+_cmake --build . --config release_
+
+_sudo make install_
+
 
 ## Prerequisite
 - CMake 3.0.2

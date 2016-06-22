@@ -17,7 +17,7 @@ public:
     /**
      * \brief Create TCPServer task
      * \param socket_port TCP Server port
-     * \param formatter_log_size Max log size
+     * \param formatted_log_size Max log size
      */
     TCPServerTask(unsigned socket_port, const std::string& formatted_log_size);
 

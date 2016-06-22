@@ -4,18 +4,17 @@
  *
  * All Tests are based on client_connection.feature
  */
-#include <gtest/gtest.h>
-#include <Poco/Net/StreamSocket.h>
-#include <Poco/Net/SocketStream.h>
-#include <Poco/Net/NetException.h>
-#include <Poco/Path.h>
 #include <Poco/File.h>
+#include <Poco/Net/NetException.h>
+#include <Poco/Net/SocketStream.h>
+#include <Poco/Net/StreamSocket.h>
+#include <Poco/Path.h>
+#include <gtest/gtest.h>
 
 /**
  * \brief Execute tests on TCP server
  */
-class TestTCPServer : public testing::Test
-{
+class TestTCPServer : public testing::Test {
 public:
     /**
      * \brief Connect TCP client on server

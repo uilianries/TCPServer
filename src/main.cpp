@@ -2,8 +2,8 @@
  * \file
  * \brief Launch TCP Server application
  */
-#include <iostream>
 #include <Poco/Util/ServerApplication.h>
+#include <iostream>
 
 #include "TCPServerApp.hpp"
 

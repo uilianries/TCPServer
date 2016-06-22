@@ -5,8 +5,8 @@
 
 #include "TCPServerApp.hpp"
 
-#include <Poco/Format.h>
 #include <Poco/File.h>
+#include <Poco/Format.h>
 #include <Poco/TaskManager.h>
 
 int TCPServerApp::main(const ArgVec& args)
@@ -14,7 +14,7 @@ int TCPServerApp::main(const ArgVec& args)
     std::ignore = args;
     Poco::TaskManager task_manager;
 
-    // TODO (uilian.rie): Add TCP Server Task
+    task_manager.start(createTCPTask());
 
     waitForTerminationRequest();
 
@@ -40,11 +40,10 @@ void TCPServerApp::configureLogger()
     const auto& app_name = config().getString("application.name");
 
     Poco::Path log_path = config().getString("log.root_directory");
-    log_path.append(Poco::Path::pathSeparator);
     log_path.append(app_name + ".log");
-    
+
     file_channel_->setProperty("path", log_path.toString());
-    file_channel_->setProperty("rotation", config().getString("log.max_file_size"));
+    file_channel_->setProperty("rotation", getLogSize().get());
     file_channel_->setProperty("archive", "timestamp");
 
     pattern_formatter_.assign(new Poco::PatternFormatter);
@@ -54,8 +53,47 @@ void TCPServerApp::configureLogger()
     logger().setChannel(formatting_channel_);
 }
 
-Poco::Path TCPServerApp::configurationPath() const
+Poco::Path TCPServerApp::configurationPath() const noexcept
 {
     const auto& app_name = config().getString("application.name");
     return Poco::format("/etc/%s/%s-config.json", app_name, app_name);
+}
+
+TCPServerTask* TCPServerApp::createTCPTask()
+{
+    const auto& log_size = getLogSize();
+    if (!log_size) {
+        throw std::invalid_argument("Could not load MAX LOG SIZE");
+    }
+
+    const auto& socket_port = getPort();
+    if (!socket_port) {
+        throw std::invalid_argument("Could not load TCP PORT");
+    }
+
+    return new TCPServerTask(socket_port.get(), log_size.get());
+}
+
+boost::optional<std::string> TCPServerApp::getLogSize() const noexcept
+{
+    boost::optional<std::string> result;
+    constexpr auto option_name = "log.max_file_size";
+
+    if (config().hasOption(option_name)) {
+        result = config().getString(option_name);
+    }
+
+    return result;
+}
+
+boost::optional<unsigned> TCPServerApp::getPort() const noexcept
+{
+    boost::optional<unsigned> result;
+    constexpr auto option_name = "server.port";
+
+    if (config().hasOption(option_name)) {
+        result = config().getUInt(option_name);
+    }
+
+    return result;
 }

@@ -23,7 +23,7 @@ class FormattedSizeValidation {
     */
     static constexpr const char* group_expression() noexcept
     {
-        return R "(^(\d{1,4})\s([M|k])$)";
+        return R"(^(\d{1,4})\s([M|k])$)";
     }
 
 public:
@@ -40,7 +40,7 @@ public:
         boost::regex regex(group_expression());
         if (boost::regex_search(formatted_size, what, regex)) {
             using binary_prefix = std::unordered_map<std::string, unsigned>;
-            static const binary_prefix prefix = { { "k", 1 }, { "M", 2 } };
+            static const binary_prefix prefix = { { "k", 1 }, { "M", 1024 } };
             constexpr auto multiplier = 1024u;
 
             result = std::stoul(what[1]) * prefix.at(what[2]) * multiplier;

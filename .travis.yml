@@ -16,7 +16,9 @@ script:
   - cd build
   - conan install ..
   - cmake ..
-  - make build_and_test
+  - cmake --build . --config release
+  - sudo make install
+  - make check
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

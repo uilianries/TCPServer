@@ -5,6 +5,7 @@
  * All Tests are based on client_connection.feature
  */
 #include <memory>
+#include <fstream>
 
 #include <Poco/File.h>
 #include <Poco/Net/NetException.h>
@@ -30,7 +31,6 @@ public:
         ASSERT_TRUE(server_process.canExecute());
 
         process_handle_.reset(new Poco::ProcessHandle(Poco::Process::launch(server_process.path(), {})));
-        ASSERT_THROW(stream_socket_.connect(server_port()), Poco::Net::NetException);
         ASSERT_NE(0, process_handle_->id());
         ASSERT_TRUE(Poco::Process::isRunning(*process_handle_));
     }
@@ -40,7 +40,6 @@ public:
      */
     void TearDown() override
     {
-        ASSERT_THROW(stream_socket_.shutdown(), Poco::Net::NetException);
         Poco::Process::requestTermination(process_handle_->id());
         Poco::Process::wait(*process_handle_);
     }
@@ -63,19 +62,8 @@ public:
         return "foobar";
     }
 
-    /**
-     * \brief Retrieve Stream channel to socket
-     * \return socket stream
-     */
-    Poco::Net::StreamSocket& stream()
-    {
-        return stream_socket_;
-    }
-
 private:
-    /** TCP client */
-    Poco::Net::StreamSocket stream_socket_;
-    std::unique_ptr<Poco::ProcessHandle> process_handle_;
+    std::unique_ptr<Poco::ProcessHandle> process_handle_; /**< Process handle */
 };
 
 /**
@@ -85,11 +73,26 @@ private:
  */
 TEST_F(TestTCPServer, Loopback)
 {
-    Poco::Net::SocketStream ss(stream());
-    // FIXME(uilian.ries): Not working yet
-    //ss << message();
+    Poco::Net::SocketAddress socket_address(server_port());
+    Poco::Net::StreamSocket stream_socket(socket_address);
+    Poco::Net::SocketStream socket_stream(stream_socket);
 
-    // TODO(uilian.ries) - Find message in log file
-    const Poco::Path log_path("/var/log/tcp-server/tcp-server.log");
-    ASSERT_TRUE(log_path.isFile());
+    socket_stream << message();
+    socket_stream.flush();
+
+    const Poco::File log_file("/tmp/tcp-server-message_0.log");
+    ASSERT_TRUE(log_file.isFile());
+    ASSERT_TRUE(log_file.canRead());
+
+    std::ifstream ifs(log_file.path());
+    std::string line;
+    bool found = false;
+    while (std::getline(ifs, line)) {
+        if (line.find(message(), 0) != std::string::npos) {
+            found = true;
+            break;
+        }
+    }
+
+    ASSERT_TRUE(found);
 }

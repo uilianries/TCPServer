@@ -15,8 +15,8 @@ target_link_libraries(${PROJECT_NAME} ${GTEST_BOTH_LIBRARIES} ${CONAN_LIBS_POCO}
 
 # Create Test #################################################################
 enable_testing()
-add_custom_target(build_and_test ${CMAKE_CTEST_COMMAND} -V)
+add_custom_target(check ${CMAKE_CTEST_COMMAND} -V)
 add_test(NAME TestAll
         COMMAND ${PROJECT_NAME}
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-add_dependencies(build_and_test ${PROJECT_NAME})
+add_dependencies(check ${PROJECT_NAME})

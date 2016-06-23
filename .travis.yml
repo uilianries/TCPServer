@@ -15,10 +15,10 @@ script:
   - mkdir build
   - cd build
   - conan install ..
-  - cmake ..
+  - cmake .. -DTRAVISCI=ON
   - cmake --build . --config release
-  - sudo make install
   - make check
+  - sudo make install
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
@@ -26,3 +26,4 @@ after_success:
 branches:
   only:
     - master
+    - develop

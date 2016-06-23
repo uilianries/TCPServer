@@ -2,6 +2,12 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(test-tcp-server CXX)
 
+# Travis Option ###############################################################
+option(TRAVISCI "Run at Travis CI" OFF)
+if (TRAVISCI)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTRAVIS_CI")
+endif()
+
 # GTest package ###############################################################
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})

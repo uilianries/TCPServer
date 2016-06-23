@@ -11,8 +11,8 @@
 #include <Poco/Path.h>
 #include <Poco/PatternFormatter.h>
 #include <Poco/Util/ServerApplication.h>
-#include <boost/optional.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/optional.hpp>
 
 #include "TCPServerTask.hpp"
 

@@ -4,6 +4,7 @@
  */
 
 #include "TCPServerTask.hpp"
+#include "TCPServer.hpp"
 #include "TCPServerLogger.hpp"
 
 TCPServerTask::TCPServerTask(unsigned socket_port, const std::string& formatted_log_size, const Poco::Path& log_directory)
@@ -17,6 +18,7 @@ TCPServerTask::TCPServerTask(unsigned socket_port, const std::string& formatted_
 void TCPServerTask::runTask()
 {
     TCPServerLogger::create(root_directory_, formatted_log_size_);
-    TCPServerLogger::instance()->log("Task Created");
-    // TODO (uilian.ries) - Create TCP Server
+    TCPServerLogger::instance().log("Starting TCP Server ...");
+    auto server = TCPServer::create(server_port_);
+    server->run();
 }

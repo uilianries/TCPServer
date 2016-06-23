@@ -93,4 +93,3 @@ boost::optional<std::string> TCPServerApp::getLogRootDir() const noexcept
 {
     return getLexicalOption<std::string>("log.root_directory");
 }
-

@@ -6,12 +6,13 @@
 #ifndef TCPSERVER_TCPSERVERLOGGER_HPP
 #define TCPSERVER_TCPSERVERLOGGER_HPP
 
-#include <string>
-#include <memory>
 #include <Poco/Path.h>
 #include <boost/log/core.hpp>
-#include <boost/log/trivial.hpp>
 #include <boost/log/sources/severity_logger.hpp>
+#include <boost/log/trivial.hpp>
+#include <memory>
+#include <mutex>
+#include <string>
 
 #include "VariadicLogger.hpp"
 
@@ -21,10 +22,8 @@ namespace sources = boost::log::v2s_mt_posix::sources;
 /**
  * \brief Create a log file with rotation support
  */
-class TCPServerLogger
-{
+class TCPServerLogger {
 public:
-
     /** Logger pointer */
     using Ptr = std::unique_ptr<TCPServerLogger>;
 
@@ -41,7 +40,7 @@ public:
      * \brief Get unique instance
      * \return Unique logger instance
      */
-    static Ptr& instance();
+    static TCPServerLogger& instance();
 
     /**
      * \brief Create unique logger instance
@@ -54,8 +53,8 @@ public:
      * \brief Variadic message log
      * \param args Anything supported by streams
      */
-    template<typename ...Args>
-    void log(Args&& ...args)
+    template <typename... Args>
+    void log(Args&&... args)
     {
         std::ostringstream oss;
         VariadicLogger(oss, std::forward<Args>(args)...);
@@ -63,15 +62,15 @@ public:
     }
 
 private:
-
     sources::severity_logger<trivial::severity_level> logger_; /**< Logger handler */
+    static std::once_flag once_; /** Avoid twice construction */
     static Ptr self_; /** singleton */
 
     /**
      * \brief Retrieve log file name
      * \return File name
      */
-    static constexpr const char * getLogName() noexcept
+    static constexpr const char* getLogName() noexcept
     {
         return "tcp-server-message";
     }
@@ -95,8 +94,6 @@ private:
      * \param rotation_size Max file sie
      */
     void initLog(const Poco::Path& root_directory, unsigned rotation_size);
-
 };
-
 
 #endif //TCPSERVER_TCPSERVERLOGGER_HPP

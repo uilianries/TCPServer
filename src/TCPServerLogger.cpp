@@ -7,13 +7,14 @@
 
 #include <boost/log/expressions.hpp>
 #include <boost/log/sinks/text_file_backend.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/sources/record_ostream.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/utility/setup/file.hpp>
 
 #include "FormattedSizeValidation.hpp"
 
 TCPServerLogger::Ptr TCPServerLogger::self_;
+std::once_flag TCPServerLogger::once_;
 
 TCPServerLogger::TCPServerLogger(const Poco::Path& directory_path, const std::string& formatted_size)
 {
@@ -39,14 +40,14 @@ void TCPServerLogger::writeFile(const std::ostringstream& oss)
 
 void TCPServerLogger::create(const Poco::Path& file_path, const std::string& formatted_size)
 {
-    if (!TCPServerLogger::self_) {
+    std::call_once(once_, [&file_path, &formatted_size]() {
         TCPServerLogger::self_.reset(new TCPServerLogger(file_path, formatted_size));
-    }
+    });
 }
 
-TCPServerLogger::Ptr& TCPServerLogger::instance()
+TCPServerLogger& TCPServerLogger::instance()
 {
-    return TCPServerLogger::self_;
+    return *self_.get();
 }
 
 void TCPServerLogger::initLog(const Poco::Path& root_directory, unsigned rotation_size)
@@ -54,15 +55,12 @@ void TCPServerLogger::initLog(const Poco::Path& root_directory, unsigned rotatio
     Poco::Path log_path = root_directory;
     log_path.append(std::string(getLogName()) + "_%N.log");
 
-    boost::log::add_file_log
-    (
-            boost::log::keywords::file_name = log_path.toString(),
-            boost::log::keywords::rotation_size = rotation_size,
-            boost::log::keywords::format = "[%TimeStamp%]: %Message%"
-    );
+    boost::log::add_file_log(
+        boost::log::keywords::file_name = log_path.toString(),
+        boost::log::keywords::rotation_size = rotation_size,
+        boost::log::keywords::auto_flush = true,
+        boost::log::keywords::format = "[%TimeStamp%]: %Message%");
 
-    boost::log::core::get()->set_filter
-    (
-            trivial::severity >= trivial::info
-    );
+    boost::log::core::get()->set_filter(
+        trivial::severity >= trivial::info);
 }

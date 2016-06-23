@@ -6,10 +6,8 @@
 #ifndef TCPSERVER_TCPSERVERTASK_HPP
 #define TCPSERVER_TCPSERVERTASK_HPP
 
-#include <Poco/Task.h>
 #include <Poco/Path.h>
-
-#include <string>
+#include <Poco/Task.h>
 
 /**
  * \brief Execute TCP server under async task

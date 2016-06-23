@@ -4,6 +4,8 @@
  *
  * All Tests are based on client_connection.feature
  */
+#include <memory>
+
 #include <Poco/File.h>
 #include <Poco/Net/NetException.h>
 #include <Poco/Net/SocketStream.h>
@@ -15,8 +17,7 @@
 /**
  * \brief Execute tests on TCP server
  */
-class TestTCPServer : public testing::Test
-{
+class TestTCPServer : public testing::Test {
 
 public:
     /**
@@ -28,7 +29,7 @@ public:
         ASSERT_TRUE(server_process.isFile());
         ASSERT_TRUE(server_process.canExecute());
 
-        process_handle_.reset(new  Poco::ProcessHandle(Poco::Process::launch(server_process.path(), {})));
+        process_handle_.reset(new Poco::ProcessHandle(Poco::Process::launch(server_process.path(), {})));
         ASSERT_THROW(stream_socket_.connect(server_port()), Poco::Net::NetException);
         ASSERT_NE(0, process_handle_->id());
         ASSERT_TRUE(Poco::Process::isRunning(*process_handle_));

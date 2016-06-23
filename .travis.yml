@@ -15,8 +15,9 @@ script:
   - mkdir build
   - cd build
   - conan install ..
-  - cmake .. -DCMAKE_BUILD_TYPE=Release
-  - make check -DTRAVIS_CI
+  - cmake .. -DTRAVISCI=ON
+  - cmake --build . --config release
+  - make check
   - sudo make install
 
 after_success:

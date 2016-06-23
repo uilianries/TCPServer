@@ -15,14 +15,12 @@
 #include <Poco/Process.h>
 #include <gtest/gtest.h>
 
-#define TRAVIS_CI 1
-
 /**
  * \brief Execute tests on TCP server
  */
 class TestTCPServer : public testing::Test {
 
-public:
+   public:
     /**
      * \brief Connect TCP client on server
      */
@@ -32,7 +30,8 @@ public:
         ASSERT_TRUE(server_process.isFile());
         ASSERT_TRUE(server_process.canExecute());
 
-        process_handle_.reset(new Poco::ProcessHandle(Poco::Process::launch(server_process.path(), {})));
+        process_handle_.reset(
+            new Poco::ProcessHandle(Poco::Process::launch(server_process.path(), {})));
         ASSERT_NE(0, process_handle_->id());
         ASSERT_TRUE(Poco::Process::isRunning(*process_handle_));
     }
@@ -64,7 +63,7 @@ public:
         return "foobar";
     }
 
-private:
+   private:
     std::unique_ptr<Poco::ProcessHandle> process_handle_; /**< Process handle */
 };
 
@@ -78,7 +77,7 @@ TEST_F(TestTCPServer, Loopback)
 /**
  * XXX (uilian.ries) - Travis CI Blocks all ports
  */
-#if !TRAVIS_CI
+#ifndef TRAVIS_CI
     Poco::Net::SocketAddress socket_address(server_port());
     Poco::Net::StreamSocket stream_socket(socket_address);
     Poco::Net::SocketStream socket_stream(stream_socket);

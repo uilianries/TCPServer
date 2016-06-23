@@ -39,8 +39,8 @@ void TCPServerApp::configureLogger()
     file_channel_.assign(new Poco::FileChannel);
     const auto& app_name = config().getString("application.name");
 
-    Poco::Path log_path = config().getString("log.root_directory");
-    log_path.append(app_name + ".log");
+    Poco::Path log_path = getLogRootDir().get();
+    log_path.append(app_name + "-app.log");
 
     file_channel_->setProperty("path", log_path.toString());
     file_channel_->setProperty("rotation", getLogSize().get());
@@ -71,29 +71,26 @@ TCPServerTask* TCPServerApp::createTCPTask()
         throw std::invalid_argument("Could not load TCP PORT");
     }
 
-    return new TCPServerTask(socket_port.get(), log_size.get());
+    const auto& log_directory = getLogRootDir();
+    if (!log_directory) {
+        throw std::invalid_argument("Could not load ROOT DIRECTORY");
+    }
+
+    return new TCPServerTask(socket_port.get(), log_size.get(), log_directory.get());
 }
 
 boost::optional<std::string> TCPServerApp::getLogSize() const noexcept
 {
-    boost::optional<std::string> result;
-    constexpr auto option_name = "log.max_file_size";
-
-    if (config().hasOption(option_name)) {
-        result = config().getString(option_name);
-    }
-
-    return result;
+    return getLexicalOption<std::string>("log.max_file_size");
 }
 
 boost::optional<unsigned> TCPServerApp::getPort() const noexcept
 {
-    boost::optional<unsigned> result;
-    constexpr auto option_name = "server.port";
-
-    if (config().hasOption(option_name)) {
-        result = config().getUInt(option_name);
-    }
-
-    return result;
+    return getLexicalOption<unsigned>("server.port");
 }
+
+boost::optional<std::string> TCPServerApp::getLogRootDir() const noexcept
+{
+    return getLexicalOption<std::string>("log.root_directory");
+}
+

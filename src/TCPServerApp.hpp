@@ -12,6 +12,7 @@
 #include <Poco/PatternFormatter.h>
 #include <Poco/Util/ServerApplication.h>
 #include <boost/optional.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include "TCPServerTask.hpp"
 
@@ -57,6 +58,12 @@ private:
     boost::optional<unsigned> getPort() const noexcept;
 
     /**
+     * \brief Retrieve log root directory
+     * \return Log file directory
+     */
+    boost::optional<std::string> getLogRootDir() const noexcept;
+
+    /**
      * \brief Get app configuration file path
      * \return Config path
      */
@@ -71,6 +78,23 @@ private:
     Poco::AutoPtr<Poco::PatternFormatter> pattern_formatter_; /**< Pattern for log */
     Poco::AutoPtr<Poco::FormattingChannel> formatting_channel_; /**< Formatting Channel */
     Poco::AutoPtr<Poco::FileChannel> file_channel_; /**< File Channel */
+
+    /**
+     * \brief Retrieve some option from the configuration file
+     * \param option Option name
+     * \return Option value
+     */
+    template <typename T>
+    boost::optional<T> getLexicalOption(const std::string& option) const
+    {
+        boost::optional<T> result;
+
+        if (config().hasOption(option)) {
+            result = boost::lexical_cast<T>(config().getString(option));
+        }
+
+        return result;
+    }
 };
 
 #endif //TCPSERVER_TCPSERVERAPP_HPP

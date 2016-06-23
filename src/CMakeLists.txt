@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(tcp-server CXX)
 
 # Boost Package ###############################################################
-find_package(Boost REQUIRED system regex)
+find_package(Boost REQUIRED system regex log log_setup filesystem thread)
 include_directories(${Boost_INCLUDE_DIRS})
 
 # Libraries ###################################################################

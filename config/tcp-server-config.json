@@ -5,6 +5,6 @@
     },
     "log" : {
         "max_file_size" : "1 M",
-        "root_directory" : "/tmp"
+        "root_directory" : "/tmp/"
     }
 }

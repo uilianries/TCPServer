@@ -9,8 +9,14 @@
 #include <string>
 #include <memory>
 #include <Poco/Path.h>
+#include <boost/log/core.hpp>
+#include <boost/log/trivial.hpp>
+#include <boost/log/sources/severity_logger.hpp>
 
 #include "VariadicLogger.hpp"
+
+namespace trivial = boost::log::v2s_mt_posix::trivial;
+namespace sources = boost::log::v2s_mt_posix::sources;
 
 /**
  * \brief Create a log file with rotation support
@@ -32,11 +38,17 @@ public:
     TCPServerLogger& operator=(TCPServerLogger&&) = delete;
 
     /**
+     * \brief Get unique instance
+     * \return Unique logger instance
+     */
+    static Ptr& instance();
+
+    /**
      * \brief Create unique logger instance
-     * \param file_path absolute file path to be wrote
+     * \param directory_path absolute directory path to be wrote
      * \param formatted_size Max file size. I.e. "1 M" is 1 Megabyte
      */
-    Ptr& create(const Poco::Path& file_path, const std::string& formatted_size);
+    static void create(const Poco::Path& directory_path, const std::string& formatted_size);
 
     /**
      * \brief Variadic message log
@@ -52,18 +64,37 @@ public:
 
 private:
 
+    sources::severity_logger<trivial::severity_level> logger_; /**< Logger handler */
+    static Ptr self_; /** singleton */
+
+    /**
+     * \brief Retrieve log file name
+     * \return File name
+     */
+    static constexpr const char * getLogName() noexcept
+    {
+        return "tcp-server-message";
+    }
+
     /**
      * \brief Create a stream logger
-     * \param file_path absolute file path to be wrote
+     * \param directory_path absolute directory path to be wrote
      * \param formatted_size Max file size. I.e. "1 M" is 1 Megabyte
      */
-    TCPServerLogger(const Poco::Path& file_path, const std::string& formatted_size);
+    TCPServerLogger(const Poco::Path& directory_path, const std::string& formatted_size);
 
     /**
      * \brief Write message on log file
      * \param oss stream to be wrote
      */
     void writeFile(const std::ostringstream& oss);
+
+    /**
+     * \brief Initialize boost log
+     * \param root_directory Where the log will be created
+     * \param rotation_size Max file sie
+     */
+    void initLog(const Poco::Path& root_directory, unsigned rotation_size);
 
 };
 

@@ -12,6 +12,9 @@ _tcp-server --daemon_
 The application read the file /etc/tcp-server/tcp-server-config.json as
  configuration.
 
+All messages receives on server are logged at /tmp/tcp-server-message.log
+All application information are logged at /tmp/tcp-server-app.log
+
 ## Features
 - Select port to listen
 - Select file log size for data stream
@@ -39,8 +42,5 @@ _sudo make install_
 
 
 ## Prerequisite
-- CMake 3.0.2
-- Boost 1.60
-- Poco 1.7.3
-- Conan.io 0.9.4
-- GTest 1.7
+- cmake 3.0.2
+- conan.io 0.9.4

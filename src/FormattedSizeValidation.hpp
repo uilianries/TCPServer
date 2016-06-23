@@ -10,6 +10,7 @@
 #include <boost/regex.hpp>
 #include <boost/optional.hpp>
 
+
 /**
  * \brief Validates formatted size
  *        If the validation is refused,
@@ -44,7 +45,7 @@ public:
             static const binary_prefix prefix = {{"k", 1} , {"M", 2}};
             constexpr auto multiplier = 1024u;
 
-            result = std::stoul(what[0]) * prefix.at(what[1]) * multiplier;
+            result = std::stoul(what[1]) * prefix.at(what[2]) * multiplier;
         }
 
         return result;

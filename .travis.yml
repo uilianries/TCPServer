@@ -15,10 +15,9 @@ script:
   - mkdir build
   - cd build
   - conan install ..
-  - cmake .. -DTRAVIS_CI
-  - cmake --build . --config release
+  - cmake .. -DCMAKE_BUILD_TYPE=Release
+  - make check -DTRAVIS_CI
   - sudo make install
-  - make check
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

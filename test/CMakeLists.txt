@@ -10,7 +10,8 @@ endif()
 
 # GTest package ###############################################################
 find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
+include_directories(SYSTEM ${GTEST_INCLUDE_DIRS})
+include_directories(SYSTEM ${CONAN_INCLUDE_DIRS_POCO})
 
 # Applicaion files ############################################################
 file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)

@@ -4,23 +4,16 @@ project(tcp-server CXX)
 
 # Boost Package ###############################################################
 find_package(Boost REQUIRED regex log log_setup filesystem system thread)
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
-# Libraries ###################################################################
-find_library(POCO_FOUNDATION PocoFoundation)
-find_library(POCO_UTIL PocoUtil)
-find_library(POCO_JSON PocoJSON)
-find_library(POCO_XML PocoXML)
-find_library(POCO_DATA PocoData)
-find_library(POCO_NET PocoNet)
-set(Poco_LIBRARIES ${POCO_UTIL} ${POCO_JSON} ${POCO_XML} ${POCO_FOUNDATION})
+include_directories(SYSTEM ${CONAN_INCLUDE_DIRS_POCO})
 
 # Applicaion files ############################################################
 file(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
 
 # Create Application ##########################################################
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${Poco_LIBRARIES} pthread)
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} ${CONAN_LIBS_POCO} pthread)
 
 # Install #####################################################################
 install(TARGETS ${PROJECT_NAME}

@@ -1,29 +1,36 @@
-#
-# \brief Default Travis for TCP Server Project
-# \author Uilian Ries <uilianries@gmail.com>
-#
 dist: trusty
-
 language: cpp
-
 compiler: gcc
-
 before_install:
-  - sudo pip install conan
-
+- sudo pip install conan
 script:
-  - mkdir build
-  - cd build
-  - conan install ..
-  - cmake .. -DTRAVISCI=ON
-  - cmake --build . --config release
-  - make check
-  - sudo make install
-
+- mkdir build
+- cd build
+- conan install ..
+- cmake .. -DTRAVISCI=ON
+- cmake --build . --config release
+- make check
+- sudo make install
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
-
+- bash <(curl -s https://codecov.io/bash)
 branches:
   only:
-    - master
-    - develop
+  - master
+  - develop
+deploy:
+  provider: releases
+  api_key:
+    secure: Ow7XfYVc1TCSfh/QphuIhSiWEtQutQzb7wdVg2iODaeAxSi0EJG+punslTsNDrSDfiICWvMMAL8YGjzHDEoN2Jjsk5fbRgEf2pGOraSdpqqI0yq1hxn/Wz2PXecEVlpwppSpEHZ92Ql/LBErAsjJCuwqCUTx3p/bkjd1fSMt+4m28ro1yMFrZ/1IK5Hgl6TCoOvGiIIddNzEOgE3C0kwVrVr7oiBcXc07JjCnmukJIfbl4XeLXilthQUN8l02ZrZJEjnFE/6cUhEUYIxEY1zrQh2DetcJLj38y8OEyQfhHpGrmF6hQYZKjviOkAGG/NYmjvo45DJmyjhxuSvoqaX7gM+rnX64FsvuS2rRusXTS8Dz0fV9D1uKyHn0iexfhrpNIJKlNMS+zRAu4FbWxMuKUxhxoAIqGACMc5e5WGM+TyhRnvWUXdk5xWvySjKo+WOPFFMk6AgKH8q1PLT6MHEJzIDCbnWGSQENTpwzdlIPgc9G/akYO7gfA0PXNZTg+xrc0TXQUlGQZttFyrVPQAzhMmFAlDQqQvPn4UohZe4ZZh0F3ysNeR/ttJb0s/RhXsv3tXkckyRwXZEuHmeA4TdejTBbMdFtXAZB5tCJsxpuRzvu2gCWDJS24kRHcfpBHAYTJdQR5Lwkw20w+E/QOYqvE1AcrhFjZSofSZgMQePVgk=
+  file:
+  - CMakeLists.txt
+  - conanfile.txt
+  - config
+  - install.sh
+  - LICENSE
+  - README.md
+  - src
+  - test
+  on:
+    repo: uilianries/TCPServer
+    tags: true
+    all_branches: true

@@ -30,7 +30,8 @@ deploy:
   - README.md
   - src
   - test
+  skip_cleanup: true
   on:
     repo: uilianries/TCPServer
-    tags: true
+    tags: false
     all_branches: true

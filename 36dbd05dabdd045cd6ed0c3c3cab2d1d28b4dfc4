@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_81dab476",
+        "filename": "src/TCPServerApp.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1009550
+      },
+      "writtenOn": "2016-10-05T17:10:00Z",
+      "side": 1,
+      "message": "Remover isso",
+      "revId": "36dbd05dabdd045cd6ed0c3c3cab2d1d28b4dfc4",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}

@@ -3,6 +3,7 @@
  * \brief Implements TCP Server application
  */
 
+#include <iostream>
 #include "TCPServerApp.hpp"
 
 #include <Poco/File.h>
@@ -13,6 +14,8 @@ int TCPServerApp::main(const ArgVec& args)
 {
     std::ignore = args;
     Poco::TaskManager task_manager;
+
+    std::clog << "Starting App" << std::endl;
 
     task_manager.start(createTCPTask());
 
